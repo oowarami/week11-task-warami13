@@ -8,4 +8,4 @@ jobs:
       - checkout
       - run: yarn install
       # - run: yarn tsc
-      - run: yarn jest
+      - run: yarn test
