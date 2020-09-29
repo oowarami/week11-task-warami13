@@ -5,8 +5,11 @@ import logger from 'morgan';
 import { graphqlHTTP } from 'express-graphql';
 import mongoose from 'mongoose';
 import MyGraphQLSchema from "./model/graphQLSchema"
+import dotenv from 'dotenv';
 
- mongoose.connect('mongodb+srv://organization-admin:ore-ofe13@organizations.h5yws.azure.mongodb.net/organizationDB?retryWrites=true&w=majority', {
+dotenv.config();
+
+mongoose.connect(process.env.MONGO_URL!, {
 			useUnifiedTopology: true,
 			useNewUrlParser: true,
 			useFindAndModify: true,

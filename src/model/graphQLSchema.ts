@@ -185,8 +185,8 @@ const Mutation = new GraphQLObjectType({
 				const { error, value } = userJoiValidation(args);
 				if (error) return error;
 
-				const user = await new userModel(value);
-				user['password'] = bcrypt.hashSync(user['password'])
+				const user = await new User(value);
+				user.password = bcrypt.hashSync(value['password'])
 					
 				const saveUser = user.save();
 				return saveUser;
@@ -206,7 +206,7 @@ const Mutation = new GraphQLObjectType({
 						return User.findOne({ email: args.email }).then((user) => {
 							if (user) {
 								
-								if (bcrypt.compareSync(password, user['password'])) {
+								if (bcrypt.compareSync(password, user.get('password'))) {
 									
 									console.log(user);
 									return user;
