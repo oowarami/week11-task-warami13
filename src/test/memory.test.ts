@@ -3,23 +3,24 @@
 // import mongoose from "mongoose";
 import  supertest from 'supertest';
 import app from '../app'
-import { Org }from  "../model/orgShema";
+// import { Org } from "../model/orgShema";
+// import MyGraphQLSchema from '../model/graphQLSchema';
 import { clearDatabase, closeDatabase, connect } from './mongoServer';
 
 
 const request = supertest(app);
 
-beforeAll(async () => connect());
+// beforeAll(async () => connect());
 
-/**
- * Clear all test data after every test.
- */
-afterEach(async () => clearDatabase());
+// /**
+//  * Clear all test data after every test.
+//  */
+// afterEach(async () => clearDatabase());
 
-/**
- * Remove and close the db and server.
- */
-afterAll(async () => closeDatabase());
+// /**
+//  * Remove and close the db and server.
+//  */
+// afterAll(async () => closeDatabase());
 
 // const allOrganizations = {
 //             organization: "vjvkvlv", 
@@ -94,90 +95,120 @@ afterAll(async () => closeDatabase());
   // 	});
   // })
 
+  describe('testing for graphql query', () => {
+		test('test should get all organizations from the datbase', (done) => {
+			request
+				.post('/graphql')
+				.send({
+					query: '{ allOrganizations{ id, organization} }',
+				})
+				.set('Accept', 'application/json')
+				.expect('Content-Type', /json/)
+				.end(function (err, res) {
+					if (err) return done(err);
+				
 
+					expect(res.body).toBeInstanceOf(Object);
+					expect(res.body.data.allOrganizations).toBeTruthy();
+          expect(res.body.data.allOrganizations.length).toBeGreaterThan(0);
+					done();
+				});
+		});
 
-  describe("tests for posting to the database  ", () => {
-    let orgInfo = {
-      products: ["bath and body works", ""],
-      employees: ["Uche", "Bulus"],
-      organization: "Rggfj",
-      address: "US",
-      ceo: "John",
-      country: "Nigeria",
-      marketValue: 90,
-      noOfEmployees: 0,
-    };
-    orgInfo["noOfEmployees"] = orgInfo.employees.length;
-    test("can be created correctly", async (done) => {
-      (await request.post('/graphql')
-        )
-          expect(async () => await Org.create()).not.toThrow()
-              
-          done()
-        })
-    });
-  
+    test('test should get one organization from the datbase', (done) => {
+			request
+				.post('/graphql')
+				.send({
+					query: '{ oneOrganization(id:"5f73a2c3b80eff2f104cad89"){id, organization}}',
+				})
+				.set('Accept', 'application/json')
+				.expect('Content-Type', /json/)
+				.end(function (err, res) {
+					if (err) return done(err);
+					console.log(res.body.data);
 
-  describe("filter by ID", () => {
-  
-    it("can be get correctly", async () => {
-      expect(
-        async () => await Org.findById('5f650011e61a521623207cf9')
-      ).not.toThrow();
+					expect(res.body).toBeInstanceOf(Object);
+					expect(res.body.data.oneOrganization).toBeTruthy();
+					expect(res.body.data.oneOrganization).toHaveProperty(
+						'id',
+						'5f73a2c3b80eff2f104cad89'
+					);
+					expect(res.body.data.oneOrganization).toHaveProperty(
+						'organization',
+						'vjvkvlv'
+					);
+					done();
+				});
+		});
+	
+		test('test should sign up user to the database', (done) => {
+			request
+				.post('/graphql')
+				.send({
+					query:
+						'mutation{addUser(email: "freshyo@gmail.com", username: "Warami", password: "journals"){username, email}}',
+				})
+				.set('Accept', 'application/json')
+				.expect('Content-Type', /json/)
+				.end(function (err, res) {
+					if (err) return done(err);
+					console.log(res.body.data);
+          expect(res.body).toBeInstanceOf(Object);
+					expect(res.body.data.addUser).toBeTruthy();
+					expect(res.body.data.addUser).toHaveProperty(
+						'email',
+						'freshyo@gmail.com'
+					);
+					expect(res.body.data.addUser).toHaveProperty(
+						'username',
+						'Warami'
+					);
+          
+					done();
+				});
     });
-  });
-  describe("delete by ID", () => {
- 
-    it("can be delete correctly", async () => {
-      expect(async () => await Org.findByIdAndRemove()).not.toThrow();
-    });
-  });
-  describe("Update by ID", () => {
-  
-    it("can be updates correctly", async () => {
-      expect(async () => await Org.findByIdAndUpdate()).not.toThrow();
-    });
-  });
-  describe("filter by organization name ", () => {
- 
-    it("can be filtered by organization name correctly", async () => {
-      let data = {
-        products: ["Mango", "Cashew"],
-        employees: ["Uche", "Bulus", "Joseph"],
-        noOfEmployees: 2,
-        organization: "Rggfj",
-        address: "US",
-        country: "Nigeria",
-        marketValue: 90,
-      };
-      expect(
-        async () => await Org.find({ organization: data.organization })
-      ).not.toThrow();
-    });
-  });
-  describe("filter by market value", () => {
+    
+		test('test should login user', (done) => {
+			request
+				.post('/graphql')
+				.send({
+					query:
+						'mutation{login(email: "laju@gmail.com", password: "fkgnlfkn"){id, email}}',
+				})
+				.set('Accept', 'application/json')
+				.expect('Content-Type', /json/)
+				.end(function (err, res) {
+          if (err) return done(err);
+          console.log(res.body.data);
+          
+          expect(res.body).toBeInstanceOf(Object);
+          	expect(res.body.data.login).toBeTruthy();
+						expect(res.body.data.login).toHaveProperty(
+							'email',
+							'laju@gmail.com'
+						);
+						expect(res.body.data.login).toHaveProperty(
+							'id',
+							'5f73aefce8084343961fd6f3'
+						);
+          
+					done();
+				});
+		});
 
-    it("can be filter by market value correctly", async () => {
-      let data = {
-        products: ["Mango", "Cashew"],
-        employees: ["Uche", "Bulus", "Joseph"],
-        noOfEmployees: 2,
-        organization: "Rggfj",
-        address: "US",
-        country: "Nigeria",
-        marketValue: 90,
-      };
-      expect(
-        async () => await Org.find({ marketValue: data.marketValue })
-      ).not.toThrow();
-    });
-  });
-  describe("Can get all from database", () => {
-    /**
-     * Tests updating from db
-     */
-    it("can get all correctly", async () => {
-      expect(async () => await Org.find()).not.toThrow();
-    });
-  });
+	// 	test('test should create an Organization', (done) => {
+	// 		request
+	// 			.post('/graphql')
+	// 			.send({
+	// 				mutation: addOrganization,
+	// 			})
+	// 			.set('Accept', 'application/json')
+	// 			.expect('Content-Type', /json/)
+	// 			.end(function (err, res) {
+	// 				if (err) return done(err);
+	// 				expect(res.body).toBeInstanceOf(Object);
+	// 				done();
+	// 			});
+	// 	});
+	});
 

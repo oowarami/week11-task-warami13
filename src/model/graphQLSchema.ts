@@ -11,6 +11,7 @@ import {
 import { Org, orgJoiValidation } from './orgShema';
 import { User, userJoiValidation } from './userSchema';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs'
 
 const userModel = User;
 const organizationModel = Org;
@@ -23,7 +24,7 @@ const UserType = new GraphQLObjectType({
 		createdAt: { type: GraphQLString },
 		updatedAt: { type: GraphQLString },
 		email: { type: GraphQLString },
-		token: { type: GraphQLString },
+		password: { type: GraphQLString },
 	}),
 });
 
@@ -185,7 +186,10 @@ const Mutation = new GraphQLObjectType({
 				if (error) return error;
 
 				const user = await new userModel(value);
-				user.save();
+				user['password'] = bcrypt.hashSync(user['password'])
+					
+				const saveUser = user.save();
+				return saveUser;
 			},
 		},
 
@@ -201,13 +205,19 @@ const Mutation = new GraphQLObjectType({
 						if (!email || !password) return new Error('All fields are required!');
 						return User.findOne({ email: args.email }).then((user) => {
 							if (user) {
-								const token = jwt.sign(
-									{
-										id: user.id,
-									},
-									'mySecret'
-									);
-									return { _id: user.id, token };
+								
+								if (bcrypt.compareSync(password, user['password'])) {
+									
+									console.log(user);
+									return user;
+									// const token = jwt.sign(
+									// 	{
+									// 		id: user.id,
+									// 	},
+									// 	'mySecret'
+									// 	);
+										// user['token'] = token;
+									}
 								}
 							});
 						} catch {
