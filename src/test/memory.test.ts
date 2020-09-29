@@ -196,19 +196,6 @@ const request = supertest(app);
 				});
 		});
 
-	// 	test('test should create an Organization', (done) => {
-	// 		request
-	// 			.post('/graphql')
-	// 			.send({
-	// 				mutation: addOrganization,
-	// 			})
-	// 			.set('Accept', 'application/json')
-	// 			.expect('Content-Type', /json/)
-	// 			.end(function (err, res) {
-	// 				if (err) return done(err);
-	// 				expect(res.body).toBeInstanceOf(Object);
-	// 				done();
-	// 			});
-	// 	});
+	
 	});
 
