@@ -5,7 +5,8 @@
   "scripts": {
     "start": "DEBUG=hello-world:server node ./bin/www",
     "dev": "DEBUG=hello-world:server nodemon ./bin/www",
-    "test": "jest"
+    "test": "jest",
+    "seed": "node test/seed.ts"
   },
   "dependencies": {
     "babel-preset-env": "^1.7.0",
