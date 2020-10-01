@@ -1,12 +1,12 @@
 
 import  supertest from 'supertest';
 import app from '../app';
-jest.setTimeout(30000);
+jest.setTimeout(30000)
 //import { clearDatabase, closeDatabase, connect } from './mongoServer';
 
 const request = supertest(app);
   describe('testing for graphql query', () => {
-		it('test should get all organizations from the datbase', (done) => {
+		test('test should get all organizations from the datbase', (done) => {
 			request
 				.post('/graphql')
 				.send({
@@ -23,7 +23,7 @@ const request = supertest(app);
 				});
 		});
 
-    it('test should get one organization from the datbase', (done) => {
+    test('test should get one organization from the datbase', (done) => {
 			request
 				.post('/graphql')
 				.send({
@@ -48,7 +48,7 @@ const request = supertest(app);
 				});
 		});
 	
-		it('test should sign up user to the database', (done) => {
+		test('test should sign up user to the database', (done) => {
 			request
 				.post('/graphql')
 				.send({
@@ -74,7 +74,7 @@ const request = supertest(app);
 				});
     });
     
-		it('test should login user', (done) => {
+		test('test should login user', (done) => {
 			request
 				.post('/graphql')
 				.send({
