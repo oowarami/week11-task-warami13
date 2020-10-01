@@ -3,9 +3,7 @@ import  supertest from 'supertest';
 import app from '../app'
 //import { clearDatabase, closeDatabase, connect } from './mongoServer';
 
-
 const request = supertest(app);
-
   describe('testing for graphql query', () => {
 		test('test should get all organizations from the datbase', (done) => {
 			request
