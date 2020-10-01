@@ -66,5 +66,5 @@
     "skipLibCheck": true,                     /* Skip type checking of declaration files. */
     "forceConsistentCasingInFileNames": true  /* Disallow inconsistently-cased references to the same file. */
   },
-  "include":["./src", "__test__", "typings/mongoose-seed.d.ts"]
+  "include":["./src", "src/__test__", "typings/mongoose-seed.d.ts"]
 }

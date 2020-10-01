@@ -1,6 +1,6 @@
 
 import  supertest from 'supertest';
-import app from '../src/app'
+import app from '../app'
 //import { clearDatabase, closeDatabase, connect } from './mongoServer';
 
 const request = supertest(app);

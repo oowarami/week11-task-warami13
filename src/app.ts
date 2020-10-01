@@ -20,7 +20,7 @@ mongoose.connect('mongodb+srv://organization-admin:ore-ofe13@organizations.h5yws
 			console.error('cannot connect to database', e)
 		);
 
-const app = express();
+const app = express()
 
 app.use(logger('dev'));
 app.use(express.json());
