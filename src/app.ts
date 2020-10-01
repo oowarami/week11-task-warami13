@@ -9,7 +9,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-mongoose.connect(process.env.MONGO_URL!, {
+mongoose.connect('mongodb+srv://organization-admin:ore-ofe13@organizations.h5yws.azure.mongodb.net/organizationDB?retryWrites=true&w=majority', {
 			useUnifiedTopology: true,
 			useNewUrlParser: true,
 			useFindAndModify: true,
