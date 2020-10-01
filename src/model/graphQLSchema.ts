@@ -207,8 +207,6 @@ const Mutation = new GraphQLObjectType({
 							if (user) {
 								
 								if (bcrypt.compareSync(password, user.get('password'))) {
-									
-									console.log(user);
 									return user;
 									// const token = jwt.sign(
 									// 	{

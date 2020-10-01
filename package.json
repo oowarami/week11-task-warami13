@@ -5,7 +5,7 @@
   "scripts": {
     "start": "DEBUG=hello-world:server node ./bin/www",
     "dev": "DEBUG=hello-world:server nodemon ./bin/www",
-    "test": "jest",
+    "test": "jest --detectOpenHandles --forceExit",
     "seed": "ts-node ./src/test/seed.ts"
   },
   "dependencies": {

@@ -1,4 +1,4 @@
-import { Console } from 'console';
+
 import  supertest from 'supertest';
 import app from '../app'
 //import { clearDatabase, closeDatabase, connect } from './mongoServer';
@@ -15,7 +15,6 @@ const request = supertest(app);
 				.expect('Content-Type', /json/)
 				.end(function (err, res) {
 					if (err) return done(err);
-          console.log(res.body)
 					expect(res.body).toBeInstanceOf(Object);
 					expect(res.body.data.allOrganizations).toBeTruthy();
           expect(res.body.data.allOrganizations.length).toBeGreaterThan(0);
@@ -34,8 +33,6 @@ const request = supertest(app);
 				.expect('Content-Type', /json/)
 				.end(function (err, res) {
 					if (err) return done(err);
-					console.log(res.body.data);
-
 					expect(res.body).toBeInstanceOf(Object);
 					expect(res.body.data.oneOrganization).toBeTruthy();
 					expect(res.body.data.oneOrganization).toHaveProperty(
@@ -61,7 +58,6 @@ const request = supertest(app);
 				.expect('Content-Type', /json/)
 				.end(function (err, res) {
 					if (err) return done(err);
-					console.log(res.body.data);
           expect(res.body).toBeInstanceOf(Object);
 					expect(res.body.data.addUser).toBeTruthy();
 					expect(res.body.data.addUser).toHaveProperty(
@@ -87,9 +83,7 @@ const request = supertest(app);
 				.set('Accept', 'application/json')
 				.expect('Content-Type', /json/)
 				.end(function (err, res) {
-          if (err) return done(err);
-          console.log(res.body.data);
-          
+          if (err) return done(err);          
           expect(res.body).toBeInstanceOf(Object);
           	expect(res.body.data.login).toBeTruthy();
 						expect(res.body.data.login).toHaveProperty(
