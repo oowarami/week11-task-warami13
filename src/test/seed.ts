@@ -1,44 +1,19 @@
-import { models } from "mongoose";
-import seeder from "mongoose-seed";
-import { User } from "../model/userSchema";
+///import { models } from "mongoose";
+const seeder = require( "mongoose-seed");
+//import { User } from "../model/userSchema";
+const { Org } = require("../model/orgShema.ts");
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const db = process.env.MONGO_URL
-
-seeder.seed(data).then(function(dbData) {
-    // The database objects are stored in dbData
-}).catch(function(err) {
-    // handle error
-});
-
-seeder.seed(data, function (err, dbData) {
-	// ...
-});
-
-
-// seeder.connect(db, () => {
-//   seeder.loadModels(modelPaths: [
-//     './graphQLSchema'
-//   ]);
-//   seeder.clearModels(models, ['organizationalModel']);
-//   seeder.populateModels(data, cb: function (err:Error, done:any) {
-//     if (err) {
-//       return console.log('seed err', err)
-//     }
-//     if (done) {
-//       return console.log('seed done', done);
-
-//     }
-//     seeder.disconnect()
-//   })
-
-// });
+console.log(db);
+console.log(process.env);
 
 const data = [{
 
-  users: {
     model: "Organization",
     organization: {
-      
       "organization": "waieresanara & co",
       "products": ["bklbk", "mb b"],
       "address": "nh;llhvjvjvjvj",
@@ -47,5 +22,24 @@ const data = [{
       "employees": "nefnenfo"
     }
    }
-}
+
 ];
+
+seeder.connect(
+	db,
+	{
+		useUnifiedTopology: true,
+		useNewUrlParser: true,
+		useFindAndModify: true,
+		useCreateIndex: true,
+	},
+	() => {
+		seeder.loadModels(['src/model/orgShema.ts']);
+		seeder.clearModels(['Organization'], function () {
+			seeder.populateModels(data, () => {
+				seeder.disconnect();
+			});
+		});
+	}
+);
+

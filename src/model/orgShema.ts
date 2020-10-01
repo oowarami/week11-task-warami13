@@ -66,3 +66,4 @@ export function orgJoiValidation(details: Record<string, unknown>) {
 }
 
 export const Org = mongoose.model('Organization', organizationSchema);
+

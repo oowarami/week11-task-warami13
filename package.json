@@ -6,7 +6,7 @@
     "start": "DEBUG=hello-world:server node ./bin/www",
     "dev": "DEBUG=hello-world:server nodemon ./bin/www",
     "test": "jest",
-    "seed": "node test/seed.ts"
+    "seed": "ts-node ./src/test/seed.ts"
   },
   "dependencies": {
     "babel-preset-env": "^1.7.0",
@@ -42,6 +42,8 @@
     "@types/uuid": "^8.3.0",
     "add": "^2.0.6",
     "mongoose-seed": "^0.6.0",
+    "node-ts": "^5.0.9",
+    "ts-node": "^9.0.0",
     "typescript": "^4.0.2",
     "yarn": "^1.22.5"
   },
