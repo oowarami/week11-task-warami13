@@ -79,23 +79,17 @@ const request = supertest(app);
 				.post('/graphql')
 				.send({
 					query:
-						'mutation{login(email: "laju@gmail.com", password: "fkgnlfkn"){id, email}}',
+						'mutation{login(email: "laju@gmail.com", password: "fkgnlfkn"){email, username}}',
 				})
 				.set('Accept', 'application/json')
 				.expect('Content-Type', /json/)
 				.end(function (err, res) {
-          if (err) return done(err);          
-          expect(res.body).toBeInstanceOf(Object);
-          	expect(res.body.data.login).toBeTruthy();
-						expect(res.body.data.login).toHaveProperty(
-							'email',
-							'laju@gmail.com'
-						);
-						expect(res.body.data.login).toHaveProperty(
-							'id',
-							'5f73aefce8084343961fd6f3'
-						);
-          
+					if (err) return done(err);
+					console.log(res.body);
+					expect(res.body).toBeInstanceOf(Object);
+					expect(res.body.data.login).toBeTruthy();
+					expect(res.body.data.login).toHaveProperty('email', 'laju@gmail.com');
+					expect(res.body.data.login).toHaveProperty('username', 'Warami');
 					done();
 				});
 		});
@@ -179,8 +173,7 @@ const request = supertest(app);
 				request
 					.post('/graphql')
 					.send({
-						query:
-							'mutation{ deleteUser(email: "laju@gmail.com"){email}}',
+						query: 'mutation{ deleteUser(email: "freshyo@gmail.com"){email}}',
 					})
 					.set('Accept', 'application/json')
 					.expect('Content-Type', /json/)
@@ -190,7 +183,7 @@ const request = supertest(app);
 						expect(res.body).toBeInstanceOf(Object);
 						expect(res.body.data.deleteUser).toHaveProperty(
 							'email',
-							"laju@gmail.com"
+							'freshyo@gmail.com'
 						);
 						done();
 					});
