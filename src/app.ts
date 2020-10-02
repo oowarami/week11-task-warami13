@@ -38,6 +38,9 @@ app.use(
 	})
 );
 
+app.use("/", function (req, res) {
+	res.json({data: "Just as expected"})
+})
 // catch 404 and forward to error handler
 app.use(function(_req, _res, next) {
   next(createError(404));
