@@ -1,6 +1,18 @@
 import mongoose from 'mongoose';
 import Joi from 'joi';
 
+interface OrgDocument extends mongoose.Document {
+	organization: string;
+	marketValue: string;
+	address: string;
+	ceo: string;
+	country: string;
+	products: [string];
+	employees: [string];
+	noOfEmployees: number;
+
+}
+
 const organizationSchema = new mongoose.Schema(
 	{
 		organization: {
@@ -65,5 +77,5 @@ export function orgJoiValidation(details: Record<string, unknown>) {
 	});
 }
 
-export const Org = mongoose.model('Organization', organizationSchema);
+export const Org = mongoose.model<OrgDocument>('Organization', organizationSchema);
 

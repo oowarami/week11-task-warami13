@@ -100,6 +100,101 @@ const request = supertest(app);
 				});
 		});
 
-	
+			test('test should update organization', (done) => {
+				request
+					.post('/graphql')
+					.send({
+						query:
+							'mutation{ updateOrganization(id:"5f760f95e0c015ac4c159795", marketValue: 800){organization, marketValue}}',
+					})
+					.set('Accept', 'application/json')
+					.expect('Content-Type', /json/)
+					.end(function (err, res) {
+						if (err) return done(err);
+						expect(res.body).toBeInstanceOf(Object);
+						expect(res.body.data.updateOrganization).toBeTruthy();
+						expect(res.body.data.updateOrganization).toHaveProperty(
+							'organization',
+							'MTN Ghana'
+						);
+						expect(res.body.data.updateOrganization).toHaveProperty(
+							'marketValue',
+							800
+						);
+						done();
+					});
+			});
+
+
+		test('test should add a new organization', (done) => {
+			request
+				.post('/graphql')
+				.send({
+					query:
+						'mutation{addOrganization(organization: "MTN Norwich", marketValue: "56%", country:"China", address:"Lagos, Nigeria", ceo:"Uchay mark", employees: ["Naomi", "Confidence"], products:["shea-butter", "oil"]){address, organization, ceo}}',
+				})
+				.set('Accept', 'application/json')
+				.expect('Content-Type', /json/)
+				.end(function (err, res) {
+					if (err) return done(err);
+					expect(res.body).toBeInstanceOf(Object);
+					expect(res.body.data.addOrganization).toHaveProperty(
+						'address',
+						'Lagos, Nigeria'
+					);
+					expect(res.body.data.addOrganization).toHaveProperty(
+						'organization',
+						'MTN Norwich'
+					);
+					expect(res.body.data.addOrganization).toHaveProperty(
+						'ceo',
+						'Uchay mark'
+					);
+					done();
+				});
+		});
+
+		test('test should delete organization from db', (done) => {
+			request
+				.post('/graphql')
+				.send({
+					query:
+						'mutation{ deleteOrganizationByCompany(organization: "MTN Norwich"){organization}}',
+				})
+				.set('Accept', 'application/json')
+				.expect('Content-Type', /json/)
+				.end(function (err, res) {
+					if (err) return done(err);
+
+					expect(res.body).toBeInstanceOf(Object);
+					expect(res.body.data.deleteOrganizationByCompany).toHaveProperty(
+						'organization',
+						'MTN Norwich'
+					);
+					done();
+				});
+		});
+
+			test('test should delete user from db', (done) => {
+				request
+					.post('/graphql')
+					.send({
+						query:
+							'mutation{ deleteUser(email: "laju@gmail.com"){email}}',
+					})
+					.set('Accept', 'application/json')
+					.expect('Content-Type', /json/)
+					.end(function (err, res) {
+						if (err) return done(err);
+
+						expect(res.body).toBeInstanceOf(Object);
+						expect(res.body.data.deleteUser).toHaveProperty(
+							'email',
+							"laju@gmail.com"
+						);
+						done();
+					});
+			});
+				
 	});
 

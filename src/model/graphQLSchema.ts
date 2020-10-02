@@ -137,12 +137,38 @@ const Mutation = new GraphQLObjectType({
 			},
 			async resolve(parent, args) {
 				try {
-					const { id, ...others } = args;
-					others.noOfEmployees = others.employees.length;
-					const result = await organizationModel.findByIdAndUpdate(id, others, {
-						new: true,
-					});
-					return result;
+					const specificData = await organizationModel.findById(args.id);
+
+					if (specificData == null) {
+						return new Error('Organization not found in the database');
+					}
+					const {
+						id,
+						organization,
+						marketValue,
+						address,
+						ceo,
+						country,
+						employees,
+						products,
+					} = args;
+					return await organizationModel.findByIdAndUpdate(
+						id,
+						{
+							$set: {
+								organization: organization || specificData['organization'],
+								marketValue: marketValue || specificData['marketValue'],
+								address: address || specificData['ceo'],
+								ceo: ceo || specificData['ceo'],
+								country: country || specificData['country'],
+								employees: employees || specificData['employees'],
+								products: products || specificData['products'],
+							},
+						},
+						{
+							new: true,
+						}
+					);
 				} catch {
 					(e: Error) => {
 						console.log(e.message);
@@ -172,6 +198,60 @@ const Mutation = new GraphQLObjectType({
 			},
 		},
 
+		deleteOrganizationByCompany: {
+			type: OrganizationType,
+			args: {
+				organization: { type: GraphQLString },
+			},
+			async resolve(parent, args) {
+				try {
+					const { organization } = args;
+					const specifcOrganization = organizationModel.findOne({
+						organization,
+					});
+					if (!specifcOrganization)
+						return new Error('Organization not found in the database');
+					// vaidata here
+					const result = await organizationModel.findOneAndDelete({
+						organization,
+					});
+					// console.log(result);
+					return result;
+				} catch {
+					(err: Error) => {
+						console.log(err.message);
+					};
+				}
+			},
+		},
+
+		deleteUser: {
+			type: UserType,
+			args: {
+				email: { type: GraphQLString },
+			},
+			async resolve(parent, args) {
+				try {
+					const { email } = args;
+					const specificUser = userModel.findOne({
+						email,
+					});
+					if (!specificUser)
+						return new Error('Organization not found in the database');
+					// vaidata here
+					const result = await userModel.findOneAndDelete({
+						email,
+					});
+					// console.log(result);
+					return result;
+				} catch {
+					(err: Error) => {
+						console.log(err.message);
+					};
+				}
+			},
+		},
+
 		addUser: {
 			type: UserType,
 			args: {
@@ -186,8 +266,8 @@ const Mutation = new GraphQLObjectType({
 				if (error) return error;
 
 				const user = await new User(value);
-				user.password = bcrypt.hashSync(value['password'])
-					
+				user.password = bcrypt.hashSync(value['password']);
+
 				const saveUser = user.save();
 				return saveUser;
 			},
@@ -198,35 +278,34 @@ const Mutation = new GraphQLObjectType({
 			args: {
 				email: { type: new GraphQLNonNull(GraphQLString) },
 				password: { type: new GraphQLNonNull(GraphQLString) },
-				},
-				async resolve (parent, args, context) {
-					try {
-						const { email, password} = args;
-						if (!email || !password) return new Error('All fields are required!');
-						return User.findOne({ email: args.email }).then((user) => {
-							if (user) {
-								
-								if (bcrypt.compareSync(password, user.get('password'))) {
-									return user;
-									// const token = jwt.sign(
-									// 	{
-									// 		id: user.id,
-									// 	},
-									// 	'mySecret'
-									// 	);
-										// user['token'] = token;
-									}
-								}
-							});
-						} catch {
-							(e: Error) => {
-								console.log(e.message);
-							};
+			},
+			async resolve(parent, args, context) {
+				try {
+					const { email, password } = args;
+					if (!email || !password) return new Error('All fields are required!');
+					return User.findOne({ email: args.email }).then((user) => {
+						if (user) {
+							if (bcrypt.compareSync(password, user.get('password'))) {
+								return user;
+								// const token = jwt.sign(
+								// 	{
+								// 		id: user.id,
+								// 	},
+								// 	'mySecret'
+								// 	);
+								// user['token'] = token;
+							}
 						}
-					},
+					});
+				} catch {
+					(e: Error) => {
+						console.log(e.message);
+					};
+				}
 			},
 		},
-	});
+	},
+});
 
 
 export default new GraphQLSchema({
