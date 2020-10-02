@@ -10,12 +10,15 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 mongoose
-	.connect(process.env.MONGO_URL!, {
-		useUnifiedTopology: true,
-		useNewUrlParser: true,
-		useFindAndModify: false,
-		useCreateIndex: true,
-	})
+	.connect(
+		process.env.MONGO_URL!,
+		{
+			useUnifiedTopology: true,
+			useNewUrlParser: true,
+			useFindAndModify: false,
+			useCreateIndex: true,
+		}
+	)
 	.then(() => console.log('connected to database'))
 	.catch((e) => console.error('cannot connect to database', e));
 

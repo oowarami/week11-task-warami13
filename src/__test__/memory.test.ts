@@ -1,8 +1,6 @@
-
 import  supertest from 'supertest';
 import app from '../app';
-jest.setTimeout(30000)
-//import { clearDatabase, closeDatabase, connect } from './mongoServer';
+
 
 const request = supertest(app);
   describe('testing for graphql query', () => {
@@ -85,7 +83,6 @@ const request = supertest(app);
 				.expect('Content-Type', /json/)
 				.end(function (err, res) {
 					if (err) return done(err);
-					console.log(res.body);
 					expect(res.body).toBeInstanceOf(Object);
 					expect(res.body.data.login).toBeTruthy();
 					expect(res.body.data.login).toHaveProperty('email', 'laju@gmail.com');

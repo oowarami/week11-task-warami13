@@ -5,8 +5,7 @@
   "scripts": {
     "start": "DEBUG=hello-world:server node ./bin/www",
     "dev": "DEBUG=hello-world:server nodemon ./bin/www",
-    "tsc": "yarn tsc",
-    "postinstall": "yarn tsc",
+    "build": "bash -e scripts/build.sh",
     "test": "jest src/__test__/memory.test.ts --detectOpenHandles --forceExit",
     "seed": "ts-node ./src/test/seed.ts"
   },
